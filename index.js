@@ -14,22 +14,20 @@ let columnas=Math.ceil(Math.sqrt(CANTIDAD_CARTAS*2));
     const main=()=>{
         const juego=new Juego(CANTIDAD_CARTAS,tiempo,movimientos);
         juego.inicializarCartas().then(()=>{
-            crearDivsRows()
+            crearDivsRows2()
         
-           let i=0;
-            for(let k=0;k<columnas; k++){
-              
-                for(let j=0;j<columnas && i<juego.getCartas().length;j++){
-                    let c=document.getElementById(`row-${k}`);
-                    c.appendChild(juego.getCartas()[i])
-                    i++;
+          
+            for(let k=0;k<juego.getCartas().length; k++){
+                    const fila=document.getElementById("row-1")
+                    fila.appendChild(juego.getCartas()[k])
+                   
                 }
                 
                 
             }
             
         
-        })
+        )
         
  
            
@@ -39,7 +37,17 @@ let columnas=Math.ceil(Math.sqrt(CANTIDAD_CARTAS*2));
         cartasDiv.parentNode.style.height=`${165*columnas}`
             let str="";
             for(let i=0 ; i<columnas;i++)
-                str+=`<div class="row " id="row-${i}">
+                str+=`<div class="row  d-flex flex-wrap " id="row-${i}">
+                     </div>`
+            cartasDiv.innerHTML=str;
+        }
+
+        function crearDivsRows2(){
+            cartasDiv.parentNode.style.width=`${165*columnas}`
+        cartasDiv.parentNode.style.height=`${165*columnas}`
+            let str="";
+           
+                str+=`<div class="row row-cols-${columnas} " id="row-1">
                      </div>`
             cartasDiv.innerHTML=str;
         }
@@ -64,3 +72,15 @@ let columnas=Math.ceil(Math.sqrt(CANTIDAD_CARTAS*2));
 
 
 })();
+
+
+/*
+<div class="container fluid text-center">
+   <div class="row ">
+       <div class="col col-md-auto">
+      </div>
+   </div>
+
+</div>
+
+*/
