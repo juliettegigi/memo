@@ -62,7 +62,7 @@ let columnas=Math.ceil(Math.sqrt(CANTIDAD_CARTAS*2));
  boton.addEventListener('click',(e)=>{
     e.preventDefault();
     CANTIDAD_CARTAS= document.getElementById('ops').value/2;
-    columnas=Math.ceil(Math.sqrt(CANTIDAD_CARTAS*2));
+    columnas=Math.floor(Math.sqrt(CANTIDAD_CARTAS*2));
     console.log(columnas);
 
     main();
