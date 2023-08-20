@@ -2,14 +2,17 @@
 import Juego from "./models/juego.js";
 (()=>{
 
+   
 let CANTIDAD_CARTAS=4; 
+const tiempo=document.getElementById("tiempo")
+const movimientos=document.getElementById("movimientos")
 const cartasDiv=document.getElementById("cartas")
 let columnas=Math.ceil(Math.sqrt(CANTIDAD_CARTAS*2));
- let arr;
+ 
 
     
     const main=()=>{
-        const juego=new Juego(CANTIDAD_CARTAS);
+        const juego=new Juego(CANTIDAD_CARTAS,tiempo,movimientos);
         juego.inicializarCartas().then(()=>{
             crearDivsRows()
         
@@ -24,13 +27,11 @@ let columnas=Math.ceil(Math.sqrt(CANTIDAD_CARTAS*2));
                 
                 
             }
-           
-            console.log("TIEMPO", juego.tiempo);        
+            
         
         })
         
-        
-      
+ 
            
           cartasDiv.addEventListener('click',juego.getEvento())
         function crearDivsRows(){
@@ -46,14 +47,20 @@ let columnas=Math.ceil(Math.sqrt(CANTIDAD_CARTAS*2));
     }
 
 
+
+
+
  const boton=document.querySelector("button")   ;
  boton.addEventListener('click',(e)=>{
     e.preventDefault();
     CANTIDAD_CARTAS= document.getElementById('ops').value/2;
     columnas=Math.ceil(Math.sqrt(CANTIDAD_CARTAS*2));
     console.log(columnas);
+
     main();
 
  })
+
+
 
 })();

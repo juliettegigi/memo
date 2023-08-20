@@ -10,8 +10,10 @@ export default class Juego {
      #tiempo;
      #posiciones=[]; */
 
-  constructor(nuroCartas) {
-    this.manejadorContainer=this.getEvento();
+  constructor(nuroCartas, tiempo,movimientos) {
+    this.elementoTiempo = tiempo;
+    this.elementoMovimientos=movimientos
+    this.manejadorContainer = this.getEvento();
     this.click = 0;
     this.imgs = [];
     this.divClickeado = null;
@@ -28,9 +30,10 @@ export default class Juego {
 
   }
 
-   inicializarCartas=async(cb, cb2)=> {
-   
+  inicializarCartas = async (cb, cb2) => {
+
     try {
+
       let rta = await fetch(this.url)
       rta = await rta.json();
       this.getEventoDiv();
@@ -64,78 +67,83 @@ export default class Juego {
 
   darVueltaCarta(div) {
     const [, b] = div.classList[0].split('-');
-    
+
     div.querySelector("img").src = (div.querySelector("img").src !== this.imgs[b]) ? this.imgs[b] : "./imgs/reverso.jpg";
 
   }
 
-  sacarEventoAdivs(){
-    this.cartas.forEach(element=>{ element.removeEventListener('click', manejadorDiv)})
+  sacarEventoAdivs() {
+    this.cartas.forEach(element => { element.removeEventListener('click', manejadorDiv) })
   }
 
-  ponerEventoAdivs(){
-    this.cartas.forEach(element=>{ element.addEventListener('click', manejadorDiv)})
-}
+  ponerEventoAdivs() {
+    this.cartas.forEach(element => { element.addEventListener('click', manejadorDiv) })
+  }
 
-  getEventoDiv(){
-    const guardo=this;
-     manejadorDiv=(e)=>{
+  getEventoDiv() {
+    const guardo = this;
+    manejadorDiv = (e) => {
       manejadorContainer(e)
-    } 
-   
-         
+    }
+
+
   }
 
-  ganar(){
-    return(this.cartas.length===0)
+  ganar() {
+    return (this.cartas.length === 0)
   }
 
   getEvento() {
-    var click=0;
-   
-    manejadorContainer= (e)=>{
-      if(click>1)return;
-    if(e.target.tagName==="IMG") { 
-          switch(click){
-                 case 0:
-                      this.darVueltaCarta(e.target.parentNode);
-                      e.target.parentNode.removeEventListener('click', manejadorDiv);
-                      this.divClickeado=e.target.parentNode;
-                      click++;
-                 break;
-                 case 1:click++;
-                      this.darVueltaCarta(e.target.parentNode);   
-                      this.sacarEventoAdivs();
-                      if (e.target.parentNode.classList[0] === this.divClickeado.classList[0]){
-                        this.cartas=this.cartas.filter((elements)=>elements.classList[0]!==e.target.parentNode.classList[0]) 
-                        click=0 
-                        if(this.cartas.length===0){
-                          const tiempoFinal=new Date();
-                          const milisegundos = tiempoFinal- this.tiempo;
+    var click = 0;
 
-                          // Calcula las diferencias en horas, minutos, segundos y milisegundos
-                          const horas = Math.floor(milisegundos / (1000 * 60 * 60));
-                          const minutos = Math.floor((milisegundos % (1000 * 60 * 60)) / (1000 * 60));
-                          const segundos = Math.floor((milisegundos % (1000 * 60)) / 1000);
-                          this.tiempo={horas,minutos,segundos,milisegundos}
-                        }
-                      }
-                      else{
-                        this.nuroIntentos++;
-                        setTimeout(() => { 
-                          this.darVueltaCarta(this.divClickeado);
-                          this.darVueltaCarta(e.target.parentNode);
-                          click=0
-                        }, 1000);
-                      }
-                      this.ponerEventoAdivs(); 
-                break;       
-                  default: click=0;
-                 break;  
-      }}
+    manejadorContainer = (e) => {
+      if (click > 1) return;
+      if (e.target.tagName === "IMG") {
+        switch (click) {
+          case 0:
+            this.darVueltaCarta(e.target.parentNode);
+            e.target.parentNode.removeEventListener('click', manejadorDiv);
+            this.divClickeado = e.target.parentNode;
+            click++;
+            break;
+          case 1: click++;
+            this.darVueltaCarta(e.target.parentNode);
+            this.sacarEventoAdivs();
+            if (e.target.parentNode.classList[0] === this.divClickeado.classList[0]) {
+              this.cartas = this.cartas.filter((elements) => elements.classList[0] !== e.target.parentNode.classList[0])
+              click = 0
+              if (this.cartas.length === 0) {
+                const tiempoFinal = new Date();
+                const milisegundos = tiempoFinal - this.tiempo;
+
+                // Calcula las diferencias en horas, minutos, segundos y milisegundos
+                const horas = Math.floor(milisegundos / (1000 * 60 * 60));
+                const minutos = Math.floor((milisegundos % (1000 * 60 * 60)) / (1000 * 60));
+                const segundos = Math.floor((milisegundos % (1000 * 60)) / 1000);
+                this.tiempo = { horas, minutos, segundos, milisegundos }
+                this.elementoTiempo.innerHTML=`${minutos}:${segundos}:${milisegundos}`
+                this.nuroIntentos++;
+               
+              }
+            }
+            else {
+              this.nuroIntentos++;
+              this.elementoMovimientos.innerHTML=`${this.nuroIntentos}`
+              setTimeout(() => {
+                this.darVueltaCarta(this.divClickeado);
+                this.darVueltaCarta(e.target.parentNode);
+                click = 0
+              }, 1000);
+            }
+            this.ponerEventoAdivs();
+            break;
+          default: click = 0;
+            break;
+        }
+      }
 
 
-         
+
     }
   }
 
@@ -143,9 +151,9 @@ export default class Juego {
 
   mezclarCartas() {
     for (let i = this.cartas.length - 1; i > 0; i--) {
-         const j = Math.floor(Math.random() * (i + 1));
-        [this.cartas[i], this.cartas[j]] = [this.cartas[j], this.cartas[i]];
+      const j = Math.floor(Math.random() * (i + 1));
+      [this.cartas[i], this.cartas[j]] = [this.cartas[j], this.cartas[i]];
     }
-    
-}
+
+  }
 }
