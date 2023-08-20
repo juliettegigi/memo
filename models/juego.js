@@ -112,6 +112,7 @@ export default class Juego {
             if (e.target.parentNode.classList[0] === this.divClickeado.classList[0]) {
               this.cartas = this.cartas.filter((elements) => elements.classList[0] !== e.target.parentNode.classList[0])
               click = 0
+              this.nuroIntentos++;
               this.elementoMovimientos.innerHTML=`${this.nuroIntentos}`
               if (this.cartas.length === 0) {
                 const tiempoFinal = new Date();
@@ -123,7 +124,7 @@ export default class Juego {
                 const segundos = Math.floor((milisegundos % (1000 * 60)) / 1000);
                 this.tiempo = { horas, minutos, segundos, milisegundos }
                 this.elementoTiempo.innerHTML=`${minutos}:${segundos}:${milisegundos}`
-                this.nuroIntentos++;
+               
                
               }
             }
